@@ -2,6 +2,12 @@ import { Schema, model } from 'mongoose';
 import { Bicycle } from './product/product.interface';
 
 const bicycleSchema = new Schema<Bicycle>({
+    id: {
+        type: String,
+        required: true,
+        
+        trim: true,
+      },
     name:{
         type: String,
         required :true,

@@ -22,6 +22,27 @@ const result=await BicycleServices.createCycleIntoDB(bicycleData)
     }
 
 }
+const getAllBicycle =async (req : Request ,res : Response)=>{
+ 
+    try{
+   
+
+    //will call service function to send this data
+const result=await BicycleServices.getAllBicyclesFromDb()
+
+    //send response
+    res.status(200).json({
+        message:"Bicycles retrieved successfully",
+        success:true,
+        data:result
+    })
+    }
+    catch(err){
+     console.log(err)   
+    }
+
+}
 export const BicycleControllers ={
-    createCycle
+    createCycle,
+    getAllBicycle
 }
