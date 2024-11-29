@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BicycleServices } from "./product.service";
 
-
+//post a bicycle
 const createCycle =async (req : Request ,res : Response)=>{
  
     try{
@@ -17,11 +17,18 @@ const result=await BicycleServices.createCycleIntoDB(bicycleData)
         data:result
     })
     }
-    catch(err){
-     console.log(err)   
-    }
+    catch (error) {
+        console.log(error)
+        res.send({
+          success: false,
+          message: 'Something went wrong',
+          error,
+        })
+      }
 
 }
+
+//get all bicycle
 const getAllBicycle =async (req : Request ,res : Response)=>{
  
     try{
@@ -37,12 +44,87 @@ const result=await BicycleServices.getAllBicyclesFromDb()
         data:result
     })
     }
-    catch(err){
-     console.log(err)   
-    }
+    catch (error) {
+        res.send({
+          success: false,
+          message: 'Something went wrong',
+          error,
+        })
+      }
 
+    
 }
+
+//get a bicycle
+const getSingleBicycle =async (req:Request ,res:Response)=>{
+    try{
+    const id=req.params.id;
+    const result=await BicycleServices.getSingleBicyclesFromDb(id)
+
+    //send response
+    res.status(200).json({
+        message:"Bicycles retrieved successfully",
+        success:true,
+        data:result
+    })
+    }
+    catch (error) {
+        res.send({
+          success: false,
+          message: 'Something went wrong',
+          error,
+        })
+      }
+}
+
+//update user
+const updatedBicycle =async (req:Request ,res:Response)=>{
+    try{
+    const id=req.params.id;
+    const{ bicycle : bicycleData}=req.body;
+    const result=await BicycleServices.updateBicyclesFromDb(id ,bicycleData)
+
+    //send response
+    res.status(200).json({
+        message:"Bicycles updated successfully",
+        success:true,
+        data:result
+    })
+    }
+    catch (error) {
+        res.send({
+          success: false,
+          message: 'Something went wrong',
+          error,
+        })
+      }
+}
+//delete bicycle
+const deleteBicycle =async (req:Request ,res:Response)=>{
+    try{
+    const id=req.params.id;
+    await BicycleServices.deleteBicyclesFromDb(id)
+
+    //send response
+    res.status(200).json({
+        message:"Bicycles deleted successfully",
+        success:true,
+        result:{}
+    })
+    }
+    catch (error) {
+        res.send({
+          success: false,
+          message: 'Something went wrong',
+          error,
+        })
+      }
+}
+
 export const BicycleControllers ={
     createCycle,
-    getAllBicycle
+    getAllBicycle,
+    getSingleBicycle,
+    updatedBicycle,
+    deleteBicycle
 }
