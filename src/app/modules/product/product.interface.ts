@@ -1,5 +1,6 @@
 
 
+
 export type Bicycle = {
    
     name: string;
@@ -8,5 +9,11 @@ export type Bicycle = {
     type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric"; 
     description:string;
     quantity:number;
-    inStock:boolean
+    inStock:boolean;
+  
+    timestamps:boolean,
+    createdAt?: Date;
+    updatedAt?: Date;
+    
 } 
+

@@ -121,10 +121,12 @@ const deleteBicycle =async (req:Request ,res:Response)=>{
       }
 }
 
+
 export const BicycleControllers ={
     createCycle,
     getAllBicycle,
     getSingleBicycle,
     updatedBicycle,
-    deleteBicycle
+    deleteBicycle,
+   
 }
