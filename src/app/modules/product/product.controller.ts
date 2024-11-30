@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { BicycleServices } from "./product.service";
+import bicycleValidationSchema from "./product.validation";
 
 //post a bicycle
 const createCycle =async (req : Request ,res : Response)=>{
@@ -8,7 +9,9 @@ const createCycle =async (req : Request ,res : Response)=>{
         const{ bicycle : bicycleData}=req.body;
 
     //will call service function to send this data
-const result=await BicycleServices.createCycleIntoDB(bicycleData)
+    const zodparsedData = bicycleValidationSchema.parse(bicycleData);
+
+const result=await BicycleServices.createCycleIntoDB(zodparsedData)
 
     //send response
     res.status(200).json({
@@ -18,7 +21,7 @@ const result=await BicycleServices.createCycleIntoDB(bicycleData)
     })
     }
     catch (error) {
-        console.log(error)
+        
         res.send({
           success: false,
           message: 'Something went wrong',

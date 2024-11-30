@@ -1,14 +1,7 @@
 import { BicycleModel } from "../product.model";
 import { Bicycle } from "./product.interface";
 
-// const createCycleIntoDB = async(bicycle : Bicycle )=>{
-//    const result= await BicycleModel.create({
-//     ...bicycle,
-//     createdAt: new Date(),
-//    })
-//    return result;
 
-// };
 const createCycleIntoDB = async (bicycle: Bicycle) => {
   const newBicycle = new BicycleModel(bicycle);
   const result = await newBicycle.save();  
@@ -35,13 +28,7 @@ const deleteBicyclesFromDb=async(id:string)=>{
   return result;
 }
 
-// const createdAtDate = async(id:string)=>{
-//   const date =await BicycleModel.findById(id)
-//   const nextDate =date ?.getCreatedDate()
-//   return {
-//     date,nextDate
-//   }
-// }
+
 
 export const BicycleServices =  {
   createCycleIntoDB,
@@ -49,5 +36,5 @@ export const BicycleServices =  {
   getSingleBicyclesFromDb,
   updateBicyclesFromDb,
   deleteBicyclesFromDb ,
-  // createdAtDate
+
 }

@@ -9,9 +9,9 @@ export type Bicycle = {
     type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric"; 
     description:string;
     quantity:number;
-    inStock:boolean;
+    inStock:boolean | undefined;
   
-    timestamps:boolean,
+    timestamps:boolean | undefined,
     createdAt?: Date;
     updatedAt?: Date;
     
