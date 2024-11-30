@@ -5,21 +5,22 @@ import { Order } from "./order.interface";
 const OrderSchema = new Schema<Order>({
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
+    match: [/.+@.+\..+/, "Please provide a valid email address"],
   },
   product: {
-    type:Schema.Types.ObjectId,
+    type:String,
     ref: "Product", // Replace 'Product' with the actual model name for the product
-    required: true,
+    required: [true, "Product reference is required"],
   },
   quantity: {
     type: Number,
-    required: true,
+    required: [true, "Quantity is required"],
     min: 1,
   },
   totalprice: {
     type: Number,
-    required: true,
+    required: [true, "Total price is required"],
     min: 0,
   },
   createdAt: {
