@@ -10,7 +10,10 @@ const createOrderIntoDb = async (order: Order) => {
   const result = await OrderModel.create(order);  
   return result;
 };
-
+const getAllOrderFromDb=async()=>{
+  const result =await OrderModel.find();
+  return result;
+};
 
 const calculateTotalRevenue = async () => {
   
@@ -37,7 +40,8 @@ const calculateTotalRevenue = async () => {
 
 export const OrderServices =  {
     createOrderIntoDb,
-    calculateTotalRevenue
+    calculateTotalRevenue,
+    getAllOrderFromDb
   
   
   }

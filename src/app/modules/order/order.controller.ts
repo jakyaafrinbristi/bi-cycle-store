@@ -27,6 +27,31 @@ const result=await OrderServices.createOrderIntoDb( zodParsedData)
       }
 
 }
+const getAllOrder=async (req : Request ,res : Response)=>{
+ 
+  try{
+ 
+
+  //will call service function to send this data
+const result=await OrderServices.getAllOrderFromDb()
+
+  //send response
+  res.status(200).json({
+      message:"Bicycles order successfully",
+      success:true,
+      data:result
+  })
+  }
+  catch (error) {
+      res.send({
+        success: false,
+        message: 'Something went wrong',
+        error,
+      })
+    }
+
+  
+}
 const calculateRevenue = async (req: Request, res: Response) => {
     try {
       const totalRevenue = await OrderServices.calculateTotalRevenue();
@@ -50,5 +75,6 @@ const calculateRevenue = async (req: Request, res: Response) => {
   
 export const OrderControllers ={
     createOrder,
-    calculateRevenue
+    calculateRevenue,
+    getAllOrder
 }
