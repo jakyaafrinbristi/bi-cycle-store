@@ -33,7 +33,7 @@ Filter bicycles by name, brand, or type using query parameters.
 
 **🛠️ Tech Stack**
 
--TypeScript
--Express.js
--MongoDB
--Mongoose
+- TypeScript
+- Express.js
+- MongoDB
+- Mongoose
