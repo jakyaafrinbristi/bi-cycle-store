@@ -5,15 +5,15 @@ export type Bicycle = {
    
     name: string;
     brand: string;
-    price: string;
+    price: number;
     type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric"; 
     description:string;
     quantity:number;
     inStock:boolean | undefined;
   
     timestamps:boolean | undefined,
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
     
 } 
 

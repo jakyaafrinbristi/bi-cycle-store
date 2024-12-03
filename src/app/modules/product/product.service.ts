@@ -1,10 +1,10 @@
-import { BicycleModel } from "../product.model";
+import { BicycleModel } from "./product.model";
 import { Bicycle } from "./product.interface";
 
 
 const createCycleIntoDB = async (bicycle: Bicycle) => {
-  const newBicycle = new BicycleModel(bicycle);
-  const result = await newBicycle.save();  
+ 
+  const result = await BicycleModel.create(bicycle);  
   return result;
 };
 const getAllBicyclesFromDb=async()=>{

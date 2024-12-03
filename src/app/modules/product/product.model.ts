@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Bicycle } from './product/product.interface';
+import { Bicycle } from './product.interface';
 
 
 const bicycleSchema = new Schema<Bicycle>({
@@ -14,7 +14,7 @@ const bicycleSchema = new Schema<Bicycle>({
     trim: true,
   },
   price: {
-    type: String,
+    type: Number,
     required: [true, 'Price is required'],
     trim: true,
   },

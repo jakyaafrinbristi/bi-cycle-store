@@ -6,11 +6,11 @@ const OrderSchema = new Schema<Order>({
   email: {
     type: String,
     required: [true, "Email is required"],
-    match: [/.+@.+\..+/, "Please provide a valid email address"],
+    
   },
   product: {
-    type:String,
-    ref: "Product", // Replace 'Product' with the actual model name for the product
+    type: String,
+    ref: "Bicycle", // Reference to the Bicycle model
     required: [true, "Product reference is required"],
   },
   quantity: {

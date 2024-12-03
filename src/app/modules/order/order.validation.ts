@@ -1,24 +1,34 @@
 import { z } from "zod";
 
-// Define the Zod schema
+// Regular expression to validate ObjectId format
+const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
+
+// Order validation schema
 const OrderValidationSchema = z.object({
   email: z
-    .string({ required_error: "Email is required" })
-    .email("Please provide a valid email address"),
+    .string()
+    .email("Invalid email address") // Validate email format
+    .nonempty("Email is required"), // Ensure it's not empty
+
   product: z
-    .string({ required_error: "Product reference is required" })
-    .regex(/^[0-9a-fA-F]{24}$/, "Invalid Product ID format"), // Validate MongoDB ObjectId
+    .string()
+    .regex(ObjectIdRegex, "Invalid Product ID format") // Ensure it's a valid ObjectId
+    .nonempty("Product reference is required"), // Ensure it's not empty
+
   quantity: z
-    .number({ required_error: "Quantity is required" })
-    .int()
-    .min(1, "Quantity must be at least 1"),
+    .number()
+    .int("Quantity must be an integer") // Ensure quantity is an integer
+    .min(1, "Quantity must be at least 1") // Ensure quantity is at least 1
+    .nonnegative("Quantity must not be negative"), // Additional safety check
+
   totalprice: z
-    .number({ required_error: "Total price is required" })
-    .min(0, "Total price cannot be negative"),
-    createdAt: z.date().default(() => new Date()),
-    updatedAt: z.date().default(() => new Date()),
-    timestamps: z.boolean() 
+    .number()
+    .min(0, "Total price must be a positive number") // Ensure total price is positive
+    .nonnegative("Total price must not be negative"), // Additional safety check
+
+  createdAt: z.date().optional(), // Optional field
+  updatedAt: z.date().optional(), // Optional field
 });
 
-// Export the schema
+// Export the validation schema
 export default OrderValidationSchema;

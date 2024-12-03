@@ -13,6 +13,7 @@ app.use(cors());
 app.use('/api/products',BicycleRoutes)
 app.use('/api/orders',OrderRoutes)
 
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
