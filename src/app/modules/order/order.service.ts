@@ -1,47 +1,37 @@
-
-import { Order } from "./order.interface";
-import OrderModel from "./order.model";
-
-
-
+import { Order } from './order.interface';
+import OrderModel from './order.model';
 
 const createOrderIntoDb = async (order: Order) => {
-  
-  const result = await OrderModel.create(order);  
+  const result = await OrderModel.create(order);
   return result;
 };
-const getAllOrderFromDb=async()=>{
-  const result =await OrderModel.find();
+const getAllOrderFromDb = async () => {
+  const result = await OrderModel.find();
   return result;
 };
 
 const calculateTotalRevenue = async () => {
-  
-    const result = await OrderModel.aggregate([
-      {
-        $project: {
-          totalRevenue: {
-            $multiply: ["$quantity", "$totalprice"]  
-          },
+  const result = await OrderModel.aggregate([
+    {
+      $project: {
+        totalRevenue: {
+          $multiply: ['$quantity', '$totalprice'],
         },
       },
-      {
-        $group: {
-          _id: null,
-          totalRevenue: { $sum: "$totalRevenue" },  
-        },
+    },
+    {
+      $group: {
+        _id: null,
+        totalRevenue: { $sum: '$totalRevenue' },
       },
-    ]);
+    },
+  ]);
 
-    
-    return result[0] ? result[0].totalRevenue : 0;
-  } 
+  return result[0] ? result[0].totalRevenue : 0;
+};
 
-
-export const OrderServices =  {
-    createOrderIntoDb,
-    calculateTotalRevenue,
-    getAllOrderFromDb
-  
-  
-  }
+export const OrderServices = {
+  createOrderIntoDb,
+  calculateTotalRevenue,
+  getAllOrderFromDb,
+};
