@@ -1,4 +1,6 @@
-import { ErrorRequestHandler } from "express";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import config from "../../config";
 
 
@@ -9,10 +11,10 @@ interface ErrorResponse {
   details?: any;
 }
 
-const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const globalErrorHandler: ErrorRequestHandler = (err :any, req :Request, res:Response, next :NextFunction) => {
   console.log(err);
   //setting default values
-  let message = err.message || "Internal Server Error";
+  const message = err.message || "Something Went Wrong";
 
   const statusCode = err.statusCode || 500;
 
