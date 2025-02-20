@@ -13,8 +13,7 @@ const OrderValidationSchema = z.object({
   product: z
     .string()
     .regex(ObjectIdRegex, 'Invalid Product ID format') // Ensure it's a valid ObjectId
-    .nonempty('Product reference is required'), // Ensure it's not empty
-
+    .min(1, 'Product reference is required'), // Ensure it's not empty
   quantity: z
     .number()
     .int('Quantity must be an integer') // Ensure quantity is an integer

@@ -51,7 +51,7 @@ const getAllBicycle = async (req: Request, res: Response) => {
 //get a bicycle
 const getSingleBicycle = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.productId;
     const result = await BicycleServices.getSingleBicyclesFromDb(id);
 
     //send response
@@ -72,7 +72,8 @@ const getSingleBicycle = async (req: Request, res: Response) => {
 //update user
 const updatedBicycle = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.productId;
+
     const { bicycle: bicycleData } = req.body;
     const result = await BicycleServices.updateBicyclesFromDb(id, bicycleData);
 
@@ -93,7 +94,8 @@ const updatedBicycle = async (req: Request, res: Response) => {
 //delete bicycle
 const deleteBicycle = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.productId;
+
     await BicycleServices.deleteBicyclesFromDb(id);
 
     //send response

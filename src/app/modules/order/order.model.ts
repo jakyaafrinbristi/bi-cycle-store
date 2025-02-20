@@ -9,7 +9,7 @@ const OrderSchema = new Schema<Order>(
       required: [true, 'Email is required'],
     },
     product: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'Bicycle', // Reference to the Bicycle model
       required: [true, 'Product reference is required'],
     },

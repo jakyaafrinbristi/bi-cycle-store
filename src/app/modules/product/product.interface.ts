@@ -6,7 +6,6 @@ export type Bicycle = {
   description: string;
   quantity: number;
   inStock: boolean | undefined;
-
   createdAt: Date;
   updatedAt: Date;
 };
