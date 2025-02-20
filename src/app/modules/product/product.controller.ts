@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { BicycleServices } from './product.service';
 import bicycleValidationSchema from './product.validation';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from "http-status";
 
 //post a bicycle
 const createCycle = async (req: Request, res: Response) => {
@@ -13,10 +15,16 @@ const createCycle = async (req: Request, res: Response) => {
     const result = await BicycleServices.createCycleIntoDB(zodparsedData);
 
     //send response
-    res.status(200).json({
-      message: 'Bicycle created successfully',
-      success: true,
-      data: result,
+    // res.status(200).json({
+    //   message: 'Bicycle created successfully',
+    //   success: true,
+    //   data: result,
+    // });
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Bicyle is Created succesfully',
+      data:result,
     });
   } catch (error) {
     res.send({
@@ -34,10 +42,11 @@ const getAllBicycle = async (req: Request, res: Response) => {
     const result = await BicycleServices.getAllBicyclesFromDb();
 
     //send response
-    res.status(200).json({
-      message: 'Bicycles retrieved successfully',
-      success: true,
-      data: result,
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Bicycles retrieved successfully',
+      data:result,
     });
   } catch (error) {
     res.send({
@@ -55,10 +64,11 @@ const getSingleBicycle = async (req: Request, res: Response) => {
     const result = await BicycleServices.getSingleBicyclesFromDb(id);
 
     //send response
-    res.status(200).json({
-      message: 'Bicycles retrieved successfully',
-      success: true,
-      data: result,
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Bicycles retrieved successfully',
+      data:result,
     });
   } catch (error) {
     res.send({
@@ -78,10 +88,11 @@ const updatedBicycle = async (req: Request, res: Response) => {
     const result = await BicycleServices.updateBicyclesFromDb(id, bicycleData);
 
     //send response
-    res.status(200).json({
-      message: 'Bicycles updated successfully',
-      success: true,
-      data: result,
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Bicycles updated successfully',
+      data:result,
     });
   } catch (error) {
     res.send({
