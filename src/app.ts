@@ -2,6 +2,8 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 
 import router from './app/router';
+import globalErrorHandler from './app/modules/middlewares/globalErrorHandler';
+import notFound from './app/modules/middlewares/notFound';
 const app: Application = express();
 // const port = 3000;
 
@@ -17,7 +19,7 @@ app.use('/api/v1', router);
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
-// app.use(globalErrorHandler);
-// app.use(notFound);
+app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;
