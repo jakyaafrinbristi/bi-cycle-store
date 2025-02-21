@@ -6,31 +6,26 @@ const OrderSchema = new Schema<Order>(
   {
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required:true,
     },
     product: {
       type: Schema.Types.ObjectId,
       ref: 'Bicycle', // Reference to the Bicycle model
-      required: [true, 'Product reference is required'],
+      required:true,
     },
     quantity: {
       type: Number,
-      required: [true, 'Quantity is required'],
-      min: 1,
+      required:true,
+ 
     },
+   
+
     totalprice: {
       type: Number,
-      required: [true, 'Total price is required'],
-      min: 0,
+      required:true,
+     
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
+    
   },
   { timestamps: true },
 );

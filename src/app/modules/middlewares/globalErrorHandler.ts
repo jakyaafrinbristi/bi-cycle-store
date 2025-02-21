@@ -5,15 +5,10 @@ import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import config from "../../config";
 
 
-interface ErrorResponse {
-  status: string;
-  message: string;
-  stack?: string;
-  details?: any;
-}
+
 
 const globalErrorHandler: ErrorRequestHandler = (err :any, req :Request, res:Response, next :NextFunction) => {
-  console.log(err);
+  // console.log(err);
   //setting default values
   const message = err.message || "Something Went Wrong";
 

@@ -1,33 +1,27 @@
 import { z } from 'zod';
 
-// Regular expression to validate ObjectId format
-const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
+export const orderCreateValidationSchema = z.object({
+  body: z.object({
+    email: z.string({
+      invalid_type_error: 'Email must be a string',
+      required_error: 'Email is required',
+    }).email('Invalid email format'), 
+    product: z.string({
+      invalid_type_error: 'Product ID must be a string',
+      required_error: 'Product ID is required',
+    }),
 
-// Order validation schema
-const OrderValidationSchema = z.object({
-  email: z
-    .string()
-    .email('Invalid email address') // Validate email format
-    .nonempty('Email is required'), // Ensure it's not empty
-
-  product: z
-    .string()
-    .regex(ObjectIdRegex, 'Invalid Product ID format') // Ensure it's a valid ObjectId
-    .min(1, 'Product reference is required'), // Ensure it's not empty
-  quantity: z
-    .number()
-    .int('Quantity must be an integer') // Ensure quantity is an integer
-    .min(1, 'Quantity must be at least 1') // Ensure quantity is at least 1
-    .nonnegative('Quantity must not be negative'), // Additional safety check
-
-  totalprice: z
-    .number()
-    .min(0, 'Total price must be a positive number') // Ensure total price is positive
-    .nonnegative('Total price must not be negative'), // Additional safety check
-
-  createdAt: z.date().optional(), // Optional field
-  updatedAt: z.date().optional(), // Optional field
+    quantity: z.number({
+      invalid_type_error: 'Quantity must be a number',
+      required_error: 'Quantity is required',
+    }).min(1, 'Quantity must be at least 1'), 
+    totalprice: z.number({
+      invalid_type_error: 'Total Price must be a number',
+      required_error: 'Total Price is required',
+    }).min(1, 'Total Price must be at least 1'), 
+  }),
 });
 
-// Export the validation schema
-export default OrderValidationSchema;
+export const orderValidationSchema = {
+  orderCreateValidationSchema,
+};
