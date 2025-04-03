@@ -1,23 +1,29 @@
 import { Router } from 'express';
-import { UserRoutes } from '../modules/user/user.router';
-import { BicycleRoutes } from '../modules/product/product.router';
-import { OrderRoutes } from '../modules/order/order.router';
+
+import productRouter from '../modules/product/product.router';
+import orderRouter from '../modules/order/order.router';
+import userRouter from '../modules/user/user.router';
+import testimonialRouter from '../modules/testimonial/testimonial.route';
 
 
 const router = Router();
 
 const moduleRoutes = [
   {
-    path: '/users',
-    route: UserRoutes,
+    path: '/user',
+    route: userRouter,
   },
   {
-    path: '/products',
-    route:BicycleRoutes,
+    path: '/product',
+    route:productRouter,
   },
   {
-    path: '/orders',
-    route: OrderRoutes,
+    path: '/order',
+    route: orderRouter,
+  },
+  {
+    path: '/testimonial',
+    route: testimonialRouter ,
   },
 
 

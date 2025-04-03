@@ -1,99 +1,73 @@
-import { Request, Response } from 'express';
-import { BicycleServices } from './product.service';
-// import bicycleValidationSchema from './product.validation';
-import sendResponse from '../../utils/sendResponse';
+import { Request, Response } from "express";
 import httpStatus from "http-status";
-import catchAsync from '../../utils/catchAsync';
+import { productService } from "./product.service";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
 
-//post a bicycle
-const createCycle = catchAsync(async (req: Request, res: Response) => {
-  
-  const { bicycle: bicycleData } = req.body;
-
-  //will call service function to send this data
-
-
-  const result = await BicycleServices.createCycleIntoDB(bicycleData );
-
-
+export const createProduct = catchAsync(async (req: Request, res: Response) => {
+  const productData = req.body;
+  const newProduct = await productService.createProduct(productData);
   sendResponse(res,{
     statusCode:httpStatus.OK,
     success:true,
-    message:'Bicyle is Created succesfully',
-    data:result,
+    message:'Product created successfully',
+    data:newProduct,
   });
-}
-);
-
-//get all bicycle
-const getAllBicycle = catchAsync(async (req: Request, res: Response) => {
-  
-  //will call service function to send this data
-  const result = await BicycleServices.getAllBicyclesFromDb();
-
-  //send response
-  sendResponse(res,{
-    statusCode:httpStatus.OK,
-    success:true,
-    message:'Bicycles retrieved successfully',
-    data:result,
-  });
-})
-
-
-//get a bicycle
-const getSingleBicycle = catchAsync(async (req: Request, res: Response) => {
-  
-  const id = req.params.productId;
-  const result = await BicycleServices.getSingleBicyclesFromDb(id);
-
-  //send response
-  sendResponse(res,{
-    statusCode:httpStatus.OK,
-    success:true,
-    message:'Bicycles retrieved successfully',
-    data:result,
-  });
-} 
-);
-
-//update user
-const updatedBicycle = catchAsync(async (req: Request, res: Response) => {
-
-  const id = req.params.productId;
-
-  const { bicycle: bicycleData } = req.body;
-  const result = await BicycleServices.updateBicyclesFromDb(id, bicycleData);
-
-  //send response
-  sendResponse(res,{
-    statusCode:httpStatus.OK,
-    success:true,
-    message:'Bicycles updated successfully',
-    data:result,
-  });
-
 });
-//delete bicycle
-const deleteBicycle = catchAsync(async (req: Request, res: Response) => {
-  
-  const id = req.params.productId;
 
-  await BicycleServices.deleteBicyclesFromDb(id);
+export const getAllProducts = catchAsync(
+  async (req: Request, res: Response) => {
+    const query = req.query;
+    const result = await productService.getProducts(query);
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Product retrieved successfully',
+      meta:result.meta,
+      data:result.result,
+    });
+  }
+);
 
-  //send response
-  res.status(200).json({
-    message: 'Bicycles deleted successfully',
-    success: true,
-    result: {},
+export const getProductById = catchAsync(
+  async (req: Request, res: Response) => {
+    const productId = req.params.id;
+    const product = await productService.getProductById(productId);
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Product retrieved successfully',
+      data:product,
+    });
+  }
+);
+
+export const updateProduct = catchAsync(async (req: Request, res: Response) => {
+  const productId = req.params.id;
+  const updateProducts = req.body;
+  const updateData= await productService.updateProductsById(productId,updateProducts);
+  sendResponse(res,{
+    statusCode:httpStatus.OK,
+    success:true,
+    message:'Product updated successfully',
+    data:updateData,
   });
-} 
-)
+});
+export const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+  const productId = req.params.id;
+  const deleted = await productService.deleteProductById(productId);
+  sendResponse(res,{
+    statusCode:httpStatus.OK,
+    success:true,
+    message:'Product retrieved successfully',
+    data:deleted,
+  });
+});
 
-export const BicycleControllers = {
-  createCycle,
-  getAllBicycle,
-  getSingleBicycle,
-  updatedBicycle,
-  deleteBicycle,
+export const productController = {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  deleteProduct,
+  updateProduct
 };

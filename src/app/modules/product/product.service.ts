@@ -1,35 +1,47 @@
-import { BicycleModel } from './product.model';
-import { Bicycle } from './product.interface';
+import QueryBuilder from "../../builder/OueryBuilder";
+import { IProduct } from "./product.interface";
+import Product from "./product.model";
 
-const createCycleIntoDB = async (bicycle: Bicycle) => {
-  const result = await BicycleModel.create(bicycle);
-  return result;
-};
-const getAllBicyclesFromDb = async () => {
-  const result = await BicycleModel.find();
-  return result;
-};
-const getSingleBicyclesFromDb = async (id: string) => {
-  const result = await BicycleModel.findById(id);
-  return result;
-};
-const updateBicyclesFromDb = async (id: string, bicycle: Partial<Bicycle>) => {
-  const result = await BicycleModel.findByIdAndUpdate(id, bicycle, {
-    new: true,
-  });
+async function createProduct(payload: IProduct) {
+  const product =await Product.create(payload);
+  return product;
+}
 
-  return result;
-};
+async function getProducts(query:Record<string,unknown>) {
+  const productQuery = new QueryBuilder(Product.find(),query)
+  .search(["name","brand","category"])
+  .filter()
+  .sort()
+  .paginate()
+  .fields()
+const result = await productQuery.modelQuery;
+const meta = await productQuery.countTotal();
+return {meta,result}
+}
 
-const deleteBicyclesFromDb = async (id: string) => {
-  const result = await BicycleModel.findByIdAndDelete(id);
-  return result;
-};
+async function getProductById(id: string) {
+  const product = await Product.findById(id);
+  return product;
+}
 
-export const BicycleServices = {
-  createCycleIntoDB,
-  getAllBicyclesFromDb,
-  getSingleBicyclesFromDb,
-  updateBicyclesFromDb,
-  deleteBicyclesFromDb,
+async function deleteProductById(id: string) {
+  const product = await Product.findByIdAndDelete(id);
+  return product;
+}
+
+async function updateProductsById(id:string, payload:IProduct){
+  const updateProduct=await Product.findByIdAndUpdate(id,payload,{
+    new:true,
+    runValidators:true});
+    
+    
+  return updateProduct;
+}
+
+export const productService = {
+  createProduct,
+  getProducts,
+  getProductById,
+  deleteProductById,
+  updateProductsById
 };

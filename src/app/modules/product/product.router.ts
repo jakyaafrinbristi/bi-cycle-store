@@ -1,14 +1,16 @@
-import express from 'express';
-import { BicycleControllers } from './product.controller';
-import validateRequest from '../middlewares/validateRequest';
-import { bicycleCreateValidationSchema, bicycleUpdateValidationSchema } from './product.validation';
+import { Router } from "express";
+import { productController } from "./product.controller";
 
-const router = express.Router();
+const productRouter = Router();
 
-router.get('/:productId', BicycleControllers.getSingleBicycle);
-router.get('/', BicycleControllers.getAllBicycle);
-router.post('/',validateRequest(bicycleCreateValidationSchema), BicycleControllers.createCycle);
-router.put('/:productId',validateRequest( bicycleUpdateValidationSchema), BicycleControllers.updatedBicycle);
-router.delete('/:productId', BicycleControllers.deleteBicycle);
+productRouter
+  .route("/:id")
+  .get(productController.getProductById)
+  .delete(productController.deleteProduct)
+  .put(productController.updateProduct)
+productRouter
+  .route("/")
+  .get(productController.getAllProducts)
+  .post(productController.createProduct);
 
-export const BicycleRoutes = router;
+export default productRouter;

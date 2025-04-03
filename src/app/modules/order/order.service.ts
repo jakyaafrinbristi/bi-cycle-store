@@ -1,61 +1,55 @@
-import { BicycleModel } from '../product/product.model';
-import { Order } from './order.interface';
-import OrderModel from './order.model';
+import { IUser } from "../user/user.interface";
+import Order from "./order.model";
+import Product from "../product/product.model";
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
 
-const createOrderIntoDb = async (payload: Order) => {
-  const { product, quantity } = payload; 
 
-  // Find bicycle by product ID
-  const bicycle = await BicycleModel.findById(product);
-  if (!bicycle) {
-    throw new Error('Product not found');
+const createOrder = async (
+  user: IUser,
+  payload: { products: { product: string; quantity: number }[] },
+
+
+) => {
+  if (!payload?.products?.length)
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Order is not specified");
+
+  const products = payload.products;
+
+  let totalPrice = 0;
+  const productDetails = await Promise.all(
+    products.map(async (item) => {
+      const product = await Product.findById(item.product);
+      if (product) {
+        const subtotal = product ? (product.price || 0) * item.quantity : 0;
+        totalPrice += subtotal;
+        return item;
+      }
+    })
+  );
+
+  const order = await Order.create({
+    user: user._id,
+    products: productDetails,
+    totalPrice,
+  });
+
+return order
+
+;
+};
+const getOrders = async (user: IUser) => {
+  const orders = await Order.find({ user: user._id }).populate("products.product");
+  if (!orders.length) {
+    throw new AppError(httpStatus.NOT_FOUND, "No orders found");
   }
-
-  // Check stock availability
-  if (bicycle.quantity < quantity) {
-    throw new Error(`Insufficient stock. Only ${bicycle.quantity} left.`);
-  }
-
-  // Calculate total price
-  const totalprice = bicycle.price * quantity;
-
-  // Deduct stock and update availability
-  bicycle.quantity -= quantity;
-  if (bicycle.quantity === 0) {
-    bicycle.inStock = false; 
-  }
-
-  // Save updated bicycle stock
-  await bicycle.save();
-
-  // Create the order with calculated total price
-  const orderData = { ...payload, totalprice };
-  const result = await OrderModel.create(orderData);
-
-  return result;
+  return orders;
 };
 
-// Get all orders
-const getAllOrderFromDb = async () => {
-  return await OrderModel.find();
-};
+ 
 
-// Corrected revenue calculation
-const calculateTotalRevenue = async () => {
-  const result = await OrderModel.aggregate([
-    {
-      $group: {
-        _id: null,
-        totalRevenue: { $sum: '$totalprice' }
-      },
-    },
-  ]);
+export const orderService = {
+  createOrder,
+  getOrders
 
-  return result[0]?.totalRevenue || 0;
-};
-
-export const OrderServices = {
-  createOrderIntoDb,
-  calculateTotalRevenue,
-  getAllOrderFromDb,
 };

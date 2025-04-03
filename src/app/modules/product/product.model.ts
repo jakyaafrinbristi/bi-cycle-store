@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
-import { Bicycle } from './product.interface';
+import mongoose, { Schema } from "mongoose";
+import { IProduct } from "./product.interface";
 
-const bicycleSchema = new Schema<Bicycle>(
+const ProductSchema = new Schema<IProduct>(
   {
     name: {
       type: String,
@@ -16,11 +16,12 @@ const bicycleSchema = new Schema<Bicycle>(
     price: {
       type: Number,
       required: true,
+      default: 0,
       trim: true,
     },
-    type: {
+    category: {
       type: String,
-      enum:['Mountain', 'Road', 'Hybrid', 'Electric'],
+      enum:['Mountain', 'Road', 'Hybrid', 'Electric','BMX'],
       trim: true,
       },
 
@@ -30,18 +31,18 @@ const bicycleSchema = new Schema<Bicycle>(
       required: true,
       trim: true,
     },
-    quantity: {
+   
+    stock: {
       type: Number,
       required: true,
-      trim: true,
+      default: 0,
     },
-    inStock: {
-      type: Boolean,
-      default: true,
-    },
+    imageUrl: { type: String },
     
   },
   { timestamps: true },
 );
 
-export const BicycleModel = model<Bicycle>('Bicycle', bicycleSchema);
+const Product = mongoose.model<IProduct>("Product", ProductSchema);
+
+export default Product;

@@ -1,7 +1,12 @@
-// import express from 'express';
-// const router = express.Router();
+import { Router } from "express";
+import { UserController } from "./user.controller";
 
-// router.post("/register", UserController.registerUser);
-// router.post("/login", UserController.loginUser);
 
-// export const UserRoutes = router;
+const userRouter = Router();
+
+userRouter.post("/register", UserController.registerUser);
+userRouter.post("/login", UserController.loginUser);
+userRouter.patch("/update/:userId", UserController.updateToAdmin);
+userRouter.get("/", UserController.getAllUsers);
+
+export default userRouter;
