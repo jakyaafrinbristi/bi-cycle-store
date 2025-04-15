@@ -1,11 +1,20 @@
+
+
+
+
+
+
+
 import { model, Schema } from "mongoose";
-import { IOrder } from "./order.interface";
+import { IOrder, OrderStatus } from "./order.interface";
+
+
 
 const OrderSchema = new Schema<IOrder>(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "User",
       required: true,
     },
     products: [
@@ -18,17 +27,28 @@ const OrderSchema = new Schema<IOrder>(
         quantity: {
           type: Number,
           required: true,
+          min: 1,
         },
       },
     ],
     totalPrice: {
       type: Number,
       required: true,
+      min: 0
     },
     status: {
       type: String,
-      enum: ["Pending", "Paid", "Shipped", "Completed", "Cancelled"],
-      default: "Pending",
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.Pending,
+    },
+    transaction: {
+      id: String,
+      transactionStatus: String,
+      bank_status: String,
+      sp_code: String,
+      sp_message: String,
+      method: String,
+      date_time: String,
     },
   
   },

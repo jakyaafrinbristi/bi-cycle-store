@@ -1,72 +1,40 @@
-// // import Shurjopay, { PaymentResponse, VerificationResponse } from "shurjopay";
-// import Shurjopay from "shurjopay";
-// import config from "../../config";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import Shurjopay, { PaymentResponse, VerificationResponse } from "shurjopay"
+import config from "../../config";
 
-// const shurjopay = new Shurjopay();
 
-// shurjopay.config(
-//   config.sp.sp_endpoint!,
-//   config.sp.sp_username!,
-//   config.sp.sp_password!,
-//   config.sp.sp_prefix!,
-//   config.sp.sp_return_url!
-// );
+const shurjopay = new Shurjopay()
+shurjopay.config(
+  config.sp.sp_endpoint!,
+  config.sp.sp_username!,
+  config.sp.sp_password!,
+  config.sp.sp_prefix!,
+  config.sp.sp_return_url!
+);
 
-// console.log(shurjopay);
-// const makePayment =async (paymentPayload:any)=>{
- 
-//  const paymentResult = await shurjopay.makePayment( 
-//   paymentPayload ,
-//   (response) =>console.log(response),
-//   (error) => console.log(error)
+console.log(shurjopay);
 
-// );
-// //  console.log(paymentResult);
-// return paymentResult;
-  
-// };
+const makePaymentAsync = async (paymentPayload:any):Promise<PaymentResponse>=>{
 
-// // const makePaymentAsync = async (
-// //   paymentPayload: any
-// // ): Promise<PaymentResponse> => {
-// //   return new Promise((resolve, reject) => {
-// //     shurjopay.makePayment(
-// //       paymentPayload,
-// //       (response) => resolve(response),
-// //       (error) => reject(error)
-// //     );
-// //   });
+return new Promise((resolve,reject)=>{
+  shurjopay.makePayment(paymentPayload,(response)=>resolve(response), 
+  (error)=>reject(error))
+})
 
-// //   //   const paymentResult = await shurjopay.makePayment(
-// //   //     paymentPayload,
-// //   //     (response) => {
-// //   //       sendResponse(res, {
-// //   //         statusCode: 200,
-// //   //         message: "Order placed successfully",
-// //   //         data: response,
-// //   //       });
-// //   //     },
-// //   //     (error) => console.log(error)
-// //   //   );
-// //   //   return paymentResult;
-// // };
 
-// const verifyPaymentAsync = (
-//   order_id: string
-// // ): Promise<VerificationResponse[]> => {
-// ) => {
-//   return new Promise((resolve, reject) => {
-//     shurjopay.verifyPayment(
-//       order_id,
-//       (response) => resolve(response),
-//       (error) => reject(error)
-//     );
-//   });
-// };
-// // shurjopay.makePayment()
 
-// export const orderUtils = {
-//   makePayment
-//   // makePaymentAsync,
-//   verifyPaymentAsync,
-// };
+};
+const verifyPaymentAsync = (order_id : string):Promise<VerificationResponse[]> =>{
+  return new Promise((resolve,reject) =>{
+    shurjopay.verifyPayment(
+      order_id,
+      (response)=>resolve(response),
+       (error)=>reject(error)
+
+    );
+  });
+};
+export const orderUtils ={
+  makePaymentAsync,
+  verifyPaymentAsync
+}

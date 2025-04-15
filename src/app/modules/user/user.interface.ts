@@ -16,6 +16,7 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
+
 export interface IUserMethods {
   comparePassword(candidatePassword: string): Promise<boolean>;
   generateToken(): string;
