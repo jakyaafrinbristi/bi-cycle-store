@@ -20,6 +20,7 @@ export interface IUser extends Document {
 export interface IUserMethods {
   comparePassword(candidatePassword: string): Promise<boolean>;
   generateToken(): string;
+  generateRefreshToken(): string
 }
 
 // Create a new Model type that knows about IUserMethods...

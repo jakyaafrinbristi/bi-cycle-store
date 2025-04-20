@@ -10,11 +10,12 @@ export default {
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   default_password: process.env.DEFAULT_PASS,
   jwt: {
-    access_secret: process.env.JWT_ACCESS_SECRET,
-    refresh_secret: process.env.JWT_REFRESH_SECRET,
-    access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
-    refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
-  },
+    access_secret: process.env.JWT_ACCESS_SECRET as string,
+    refresh_secret: process.env.JWT_REFRESH_SECRET as string,
+    access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN as string,
+    refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN as string,
+  }
+,  
   sp: {
     sp_endpoint: process.env.SP_ENDPOINT,
     sp_username: process.env.SP_USERNAME,
