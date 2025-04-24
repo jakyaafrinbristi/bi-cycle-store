@@ -4,6 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 import { UserService } from "./user.service";
 import httpStatus from "http-status";
 import config from "../../config";
+import AppError from "../../errors/AppError";
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const data = await UserService.registerUser(req.body);
@@ -35,7 +36,12 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
-  const { token } = req.body;
+  const token = req.cookies.refreshToken;
+
+  if (!token) {
+    throw new AppError(401, 'No refresh token found');
+  }
+
   const accessToken = await UserService.refreshToken(token);
 
   sendResponse(res, {
@@ -45,6 +51,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
     data: { accessToken },
   });
 });
+
 
 const updateToAdmin = catchAsync(async (req: Request, res: Response) => {
   const { userId} =req.params;
@@ -65,6 +72,30 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     data,
   });
 });
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+  const email = req.user.email;  // Get email from the authenticated user
+  const updatedUser = await UserService.updateUserProfile(email, req.body);  // Call service to update profile
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Profile updated successfully",
+    data: updatedUser
+  });
+});
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const email = req.user.email;  // Get email from the authenticated user
+  const { currentPassword, newPassword } = req.body;
+
+  // Call service to change the password
+ const changePasswordUser= await UserService.changeUserPassword(email, currentPassword, newPassword);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password updated successfully",
+    data:changePasswordUser
+  });
+});
 
 
 export const UserController = {
@@ -72,6 +103,9 @@ export const UserController = {
   loginUser,
   updateToAdmin ,
   getAllUsers,
-  refreshToken
+  refreshToken,
+  updateProfile,
+  changePassword
+
 };
 

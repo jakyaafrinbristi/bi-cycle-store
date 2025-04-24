@@ -21,7 +21,7 @@ app.use(cors({ origin: ["http://localhost:5173" ,"http://localhost:5174"
 app.use('/api/', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+  res.send('Bicycle store!');
 });
 app.use(globalErrorHandler);
 app.use(notFound);

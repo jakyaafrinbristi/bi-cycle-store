@@ -44,6 +44,8 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
+  console.log("Candidate:", candidatePassword);
+  console.log("Original:", this.password);
   return bcrypt.compare(candidatePassword, this.password);
 };
 
@@ -54,18 +56,38 @@ UserSchema.methods.generateToken = function (): string {
     config.jwt.access_secret!,
     {
       expiresIn: config.jwt.access_expires_in!,
-    }
+    } as jwt.SignOptions
   );
 };
+// UserSchema.methods.generateToken = function (): string {
+//   return jwt.sign(
+//     { email: this.email, role: this.role },
+//     config.jwt.access_secret as jwt.Secret,
+//     {
+//       expiresIn: config.jwt.access_expires_in as string | number,
+//       algorithm: 'HS256'
+//     } as jwt.SignOptions
+//   );
+// };
 UserSchema.methods.generateRefreshToken = function (): string {
   return jwt.sign(
     { email: this.email, role: this.role },
     config.jwt.refresh_secret!,
     {
       expiresIn: config.jwt.refresh_expires_in!,
-    }
+    } as jwt.SignOptions
   );
 }
+// UserSchema.methods.generateRefreshToken = function (): string {
+//   return jwt.sign(
+//     { email: this.email, role: this.role },
+//     config.jwt.refresh_secret as jwt.Secret,
+//     {
+//       expiresIn: config.jwt.refresh_expires_in as string | number,
+//        algorithm: 'HS256'
+//     } as jwt.SignOptions
+//   );
+// }
 
 const User = mongoose.model<IUser, TUserModel>("User", UserSchema);
 
