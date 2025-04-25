@@ -9,6 +9,7 @@ import { UserRole } from "./user.constant";
 const UserSchema = new Schema<IUser, TUserModel, IUserMethods>(
   {
     name: { type: String, required: true, trim: true },
+    image: { type: String,  trim: true },
     email: {
       type: String,
       required: true,
@@ -31,7 +32,7 @@ const UserSchema = new Schema<IUser, TUserModel, IUserMethods>(
   }
 );
 
-// Hash password before saving
+
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
@@ -40,54 +41,35 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-// Compare password method
+
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
-  console.log("Candidate:", candidatePassword);
-  console.log("Original:", this.password);
+
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Generate JWT token method
+
 UserSchema.methods.generateToken = function (): string {
   return jwt.sign(
-    { email: this.email, role: this.role },
+    { email: this.email, role: this.role ,name:this.name,address:this.address,image:this.image},
     config.jwt.access_secret!,
     {
       expiresIn: config.jwt.access_expires_in!,
     } as jwt.SignOptions
   );
 };
-// UserSchema.methods.generateToken = function (): string {
-//   return jwt.sign(
-//     { email: this.email, role: this.role },
-//     config.jwt.access_secret as jwt.Secret,
-//     {
-//       expiresIn: config.jwt.access_expires_in as string | number,
-//       algorithm: 'HS256'
-//     } as jwt.SignOptions
-//   );
-// };
+
 UserSchema.methods.generateRefreshToken = function (): string {
   return jwt.sign(
-    { email: this.email, role: this.role },
+    {  email: this.email, role: this.role ,name:this.name,address:this.address,image:this.image},
     config.jwt.refresh_secret!,
     {
       expiresIn: config.jwt.refresh_expires_in!,
     } as jwt.SignOptions
   );
 }
-// UserSchema.methods.generateRefreshToken = function (): string {
-//   return jwt.sign(
-//     { email: this.email, role: this.role },
-//     config.jwt.refresh_secret as jwt.Secret,
-//     {
-//       expiresIn: config.jwt.refresh_expires_in as string | number,
-//        algorithm: 'HS256'
-//     } as jwt.SignOptions
-//   );
-// }
+
 
 const User = mongoose.model<IUser, TUserModel>("User", UserSchema);
 

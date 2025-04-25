@@ -21,7 +21,7 @@ const loginUser = async (payload: IUser) => {
   const user = await User.findOne({ email: payload.email }).select(
     "+password"
   );
-  console.log("User password from DB:", user?.password);
+
   if (!user || !(await user.comparePassword(payload.password))) {
     throw new Error("Invalid email or password");
   }
@@ -32,17 +32,16 @@ const loginUser = async (payload: IUser) => {
 };
 const refreshToken = async (refreshToken: string) => {
   try {
-    // Verify the refresh token
+ 
     const decoded = jwt.verify(refreshToken, config.jwt.refresh_secret!) as { email: string; role: string };
 
-    // Find user by email (decoded from refresh token)
     const user = await User.findOne({ email: decoded.email });
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    // Generate a new access token using the decoded email and role
+  
     const accessToken = jwt.sign(
       { email: decoded.email, role: decoded.role },
       config.jwt.access_secret,
@@ -72,18 +71,16 @@ const getAllUsers = async () => {
 };
 
 const updateUserProfile = async (email: string, updates: any) => {
-  // Find user by email
+
   const user = await User.findOne({ email });
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found!");
   }
 
-  // Update user profile with the new details
   Object.assign(user, updates);
   await user.save();
 
-  return user;  // Return the updated user
- 
+  return user;  
   
 };
 const changeUserPassword = async (email: string, currentPassword: string, newPassword: string) => {
@@ -97,7 +94,7 @@ const changeUserPassword = async (email: string, currentPassword: string, newPas
     throw new AppError(httpStatus.BAD_REQUEST, "Current password is incorrect!");
   }
 
-  // Only assign new password (let pre-save handle hashing)
+
   user.password = newPassword;
   await user.save();
 };

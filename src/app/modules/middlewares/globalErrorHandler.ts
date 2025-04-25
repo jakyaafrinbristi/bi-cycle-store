@@ -8,13 +8,11 @@ import config from "../../config";
 
 
 const globalErrorHandler: ErrorRequestHandler = (err :any, req :Request, res:Response, next :NextFunction) => {
-  // console.log(err);
-  //setting default values
+
   const message = err.message || "Something Went Wrong";
 
   const statusCode = err.statusCode || 500;
 
-  //ultimate return
   res.status(statusCode).json({
     success: false,
     message,

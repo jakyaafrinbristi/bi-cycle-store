@@ -6,6 +6,7 @@ import { UserRole } from "./user.constant";
 
 export interface IUser extends Document {
   name: string;
+  image:string;
   email: string;
   password: string;
   role: UserRole;
@@ -23,7 +24,7 @@ export interface IUserMethods {
   generateRefreshToken(): string
 }
 
-// Create a new Model type that knows about IUserMethods...
+
 type TUserModel = Model<IUser, {}, IUserMethods>;
 
 export default TUserModel;

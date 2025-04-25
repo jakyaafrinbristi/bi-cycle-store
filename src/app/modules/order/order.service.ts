@@ -8,6 +8,7 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { IOrder, OrderStatus } from "./order.interface";
 import { orderUtils } from "./order.utils";
+import { UserRole } from "../user/user.constant";
 
 
 
@@ -26,7 +27,6 @@ const createOrder = async (
   const products = payload.products;
   let totalPrice = 0;
 
-  // Fetch product details and calculate total price
   const productDetails = await Promise.all(
     products.map(async (item) => {
       const product = await Product.findById(item.product);
@@ -44,11 +44,11 @@ const createOrder = async (
       const subtotal = (product.price || 0) * item.quantity;
       totalPrice += subtotal;
 
-      return { ...item, price: product.price }; // Add price to product details
+      return { ...item, price: product.price }; 
     })
   );
 
-  // Update stock and create the order
+
   for (const item of productDetails) {
     await Product.findByIdAndUpdate(item.product, {
       $inc: { stock: -item.quantity },
@@ -90,70 +90,25 @@ const createOrder = async (
 };
 
 
-//   return {order,payment}; 
-// };
 
+const getOrders = async (user: IUser) => {
+  const query = user.role === UserRole.admin ? {} : { user: user._id };
 
-// const getOrders = async (user: IUser) => {
-//   const orders = await Order.find({ user: user._id }).populate("products.product");
+  const orders = await Order.find(query)
+    .populate("user")
+    .populate("products.product");
 
-//   if (!orders.length) {
-//     throw new AppError(httpStatus.NOT_FOUND, "No orders found");
-//   }
-
-//   return orders;
-// };
-const getOrders = async (isAdmin: boolean) => {
-  if (isAdmin) {
-    return await Order.find().populate("user").populate("products.product");
-  } else {
-    return await Order.find().populate("products.product");
-  }
+  return orders;
 };
 
-// const updateOrder = async (
-//   id: string,
-//   payload: { status?: OrderStatus }
-// ) => {
-//   if (payload.status && !Object.values(OrderStatus).includes(payload.status)) {
-//     throw new AppError(httpStatus.BAD_REQUEST, "Invalid status");
-//   }
 
-//   const order = await Order.findById(id);
-//   if (!order) {
-//     throw new AppError(httpStatus.NOT_FOUND, "Order not found");
-//   }
 
-//   if (payload.status) {
-//     order.status = payload.status;
-//     await order.save();
-//   }
-
-//   return order;
-// };
 const updateOrder = async (orderId: string, updateData: IOrder) => {
   const order = await Order.findByIdAndUpdate(orderId, updateData, { new: true });
   return order;
 };
 
-// const deleteOrder = async (id: string) => {
-//   const order = await Order.findById(id);
-//   if (!order) {
-//     throw new AppError(httpStatus.NOT_FOUND, "Order not found");
-//   }
 
-//   // Rollback stock for pending orders
-//   if (order.status === OrderStatus.Pending) {
-//     for (const item of order.products) {
-//       await Product.findByIdAndUpdate(item.product, {
-//         $inc: { stock: item.quantity },
-//       });
-//     }
-//   }
-
-//   const deletedOrder = await Order.findByIdAndDelete(id);
-//   return deletedOrder; // Return the deleted order
-// };
 const deleteOrder = async (orderId: string) => {
   await Order.findByIdAndDelete(orderId);
 };

@@ -1,14 +1,13 @@
 
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { UserRole } from "../user/user.constant";
+
 import { orderService } from "./order.service";
 import httpStatus from "http-status";
 
 const createOrder = catchAsync(async (req, res) => {
   const user = req.user;  
 
-console.log(req.body)
  
   const order = await orderService.createOrder(user, req.body,req.ip!);
 
@@ -21,9 +20,9 @@ console.log(req.body)
 });
 
 const getOrders = catchAsync(async (req, res) => {
-  const user = req.user;  
+  const user = req.user;
 
-  const orders = await orderService.getOrders(user.role === UserRole.admin); 
+  const orders = await orderService.getOrders(user);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -33,19 +32,8 @@ const getOrders = catchAsync(async (req, res) => {
   });
 });
 
-// const updateOrder = catchAsync(async (req, res) => {
-//   const { id } = req.params; 
-//   const { status } = req.body;  
 
-//   const updatedOrder = await orderService.updateOrder(id, { status });
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Order updated successfully",
-//     data: updatedOrder,
-//   });
-// });
 const updateOrder = catchAsync(async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;

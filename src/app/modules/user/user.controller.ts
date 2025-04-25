@@ -19,14 +19,13 @@ const registerUser = catchAsync(async (req: Request, res: Response) => {
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { accessToken, refreshToken } = await UserService.loginUser(req.body);
 
-  // Refresh Token ke Cookie te store
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: config.NODE_ENV === "production",
     sameSite: "strict",
   });
 
-  // Only Access Token pathabo response e
   sendResponse(res, {
     statusCode: httpStatus.ACCEPTED,
     success: true,
@@ -73,8 +72,8 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const email = req.user.email;  // Get email from the authenticated user
-  const updatedUser = await UserService.updateUserProfile(email, req.body);  // Call service to update profile
+  const email = req.user.email; 
+  const updatedUser = await UserService.updateUserProfile(email, req.body);  
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -83,10 +82,10 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const changePassword = catchAsync(async (req: Request, res: Response) => {
-  const email = req.user.email;  // Get email from the authenticated user
+  const email = req.user.email;  
   const { currentPassword, newPassword } = req.body;
 
-  // Call service to change the password
+
  const changePasswordUser= await UserService.changeUserPassword(email, currentPassword, newPassword);
 
   sendResponse(res, {

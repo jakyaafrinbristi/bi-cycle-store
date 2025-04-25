@@ -5,4 +5,3 @@ export enum UserRole {
   }
   
   
-// // export const UserStatus = ['in-progress', 'blocked']; 

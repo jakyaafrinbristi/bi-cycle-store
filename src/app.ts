@@ -5,7 +5,7 @@ import router from './app/router';
 import globalErrorHandler from './app/modules/middlewares/globalErrorHandler';
 import notFound from './app/modules/middlewares/notFound';
 const app: Application = express();
-// const port = 3000;
+
 
 //parser
 app.use(express.json());

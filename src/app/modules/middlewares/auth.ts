@@ -10,14 +10,12 @@ import User from "../user/user.model";
 const auth = (...requiredRoles: string[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-    // console.log(token)
-
-    // checking if the token is missing
+   
     if (!token) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
     }
 
-    // checking if the given token is valid
+   
     const decoded = jwt.verify(
       token,
       config.jwt.access_secret as string
@@ -25,9 +23,9 @@ const auth = (...requiredRoles: string[]) => {
 
     const { role, email  } = decoded;
 
-    // checking if the user is exist
+   
     const user = await User.findOne({ email });
-    console.log(user)
+
 
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");
